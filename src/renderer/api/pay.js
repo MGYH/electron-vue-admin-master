@@ -1,11 +1,9 @@
 import request from '@/utils/request'
 
-export function alipay(authCode) {
+export function pay(payment, authCode) {
   return request({
-    url: '/alipay/tradePay',
-    method: 'post',
-    data: {
-      authCode
-    }
+    url: '/' + payment + '/tradePay',
+    method: 'get',
+    params: { authCode }
   })
 }

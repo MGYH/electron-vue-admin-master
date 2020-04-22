@@ -28,27 +28,27 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
+    redirect: '/checkout',
+    name: 'checkout',
     hidden: true,
     children: [{
-      path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      path: 'checkout',
+      component: () => import('@/views/checkout/index')
     }]
   },
 
   {
-    path: '/example',
+    path: '/goodsmanage',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: '/goodsmanage',
+    name: '商品管理',
+    meta: { title: '商品管理', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'addGoods',
+        name: 'addGoods',
+        component: () => import('@/views/goodsManage/addGoods'),
+        meta: { title: '新增商品', icon: 'table' }
       },
       {
         path: 'tree',
