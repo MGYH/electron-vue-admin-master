@@ -1,0 +1,13 @@
+//后代选择器
+.editTable  .el-input__inner {
+  border: 1px solid #dcdfe6;
+  color: #606266
+}
+// ：disable :hover css伪类
+.editTable  .el-input__inner:disabled {
+  border: 0px solid #dcdfe6;
+  color: #606266;
+  background-color: #fff;
+}
+
+

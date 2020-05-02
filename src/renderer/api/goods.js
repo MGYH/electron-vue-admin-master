@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 
 export function getGoods(goodCode) {
-  console.log(goodCode)
   return request({
     url: '/goods/getGoodsByCode',
     method: 'get',
@@ -10,7 +9,6 @@ export function getGoods(goodCode) {
 }
 
 export function sellGoods(authCode, sellRecord, goodsList) {
-  console.log(authCode, sellRecord, goodsList)
   return request({
     url: '/goods/sellGood',
     method: 'post',
@@ -18,6 +16,16 @@ export function sellGoods(authCode, sellRecord, goodsList) {
       authCode,
       sellRecord,
       goodsList
+    }
+  })
+}
+
+export function save(good) {
+  return request({
+    url: '/goods/save',
+    method: 'post',
+    data: {
+      good
     }
   })
 }

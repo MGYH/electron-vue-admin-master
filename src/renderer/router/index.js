@@ -51,6 +51,12 @@ export const constantRouterMap = [
         meta: { title: '新增商品', icon: 'table' }
       },
       {
+        path: 'enterGoods',
+        name: 'enterGoods',
+        component: () => import('@/views/goodsManage/enterGoods'),
+        meta: { title: '商品录入', icon: 'table' }
+      },
+      {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),

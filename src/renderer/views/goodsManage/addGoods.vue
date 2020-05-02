@@ -1,174 +1,99 @@
 <template>
-  <div>
-    <el-table
-      :data="tableData"
-      border
-      :height="height"
-      @row-click="rowClick"
-      style="width: 100%">
-      <el-table-column
-        fixed
-        prop="date"
-        label="日期">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名">
-      </el-table-column>
-      <el-table-column
-        prop="province"
-        label="省份">
-      </el-table-column>
-      <el-table-column
-        prop="city"
-        label="市区">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址">
-      </el-table-column>
-      <el-table-column
-        prop="zip"
-        label="邮编">
-      </el-table-column>
-    </el-table>
-  </div>
+  <pagination-table :model="formInline">
+    <template v-slot:search>
+      <el-form :inline="true" v-model="formInline.form">
+        <el-form-item label="测试">
+          <el-input v-model="formInline.form.test" placeholder="测试"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </template>
+    <template>
+      <el-table
+        :data="formInline.data"
+        :height="height"
+        class="editTable"
+        style="width: 100%">
+        <el-table-column label="条形码" prop="code"></el-table-column>
+        <el-table-column label="名称" prop="name">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.name" :disabled="!scope.row.edit"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="类型" prop="type">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.type" :disabled="!scope.row.edit"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="进价" prop="purchasePrice">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.purchasePrice"  :disabled="!scope.row.edit"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="单价" prop="price">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.price" :disabled="!scope.row.edit"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="保质期" prop="shelfLife">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.shelfLife" :disabled="!scope.row.edit"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button @click="handleClick(scope.row)" type="text" size="small" v-if="!scope.row.edit">修改</el-button>
+            <el-button @click="save(scope.row)" type="text" size="small" v-else>保存</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </template>
+  </pagination-table>
 </template>
 
 <script>
+  import PaginationTable from '../../components/Table/PaginationTable'
   import { clientResize } from '@/mixins/getClientResize'
-
+  import PagedList from '@/utils/pageList'
+  import { save } from '@/api/goods'
+  import { Message } from 'element-ui'
   export default {
     mixins: [clientResize],
+    name: 'test',
+    components: { PaginationTable },
     methods: {
+      onSubmit() {
+        console.log('==========', this.formInline)
+        this.formInline.search()
+        console.log(this.formInline)
+      },
       handleClick(row) {
+        row.edit = true
         console.log(row)
       },
-      rowClick(row) {
-        this.percentage = 0.6
+      save(row) {
+        save(row).then(
+          Message({
+            message: '成功',
+            type: 'success',
+            duration: 5 * 1000
+          })
+        )
+        row.edit = false
       }
     },
     mounted() {
+      console.log(this.height, '=======123=====asd123')
     },
-    name: 'addGoods',
     data() {
       return {
-        percentage: 1,
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200344
-        }]
+        percentage: 0.8,
+        formInline: new PagedList('/goods/findAll'),
+        height: ((window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) - 51) * 0.8,
+        test: '',
+        tableData: []
       }
     }
   }
