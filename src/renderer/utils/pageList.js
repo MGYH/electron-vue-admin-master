@@ -8,13 +8,14 @@ export function postSearch(self) {
   })
 }
 export default class PagedList {
-  constructor(url) {
+  constructor(url, pageSize, isedit) {
     this.currentPage = 1
     this.url = url
     this.total = 0
     this.data = []
     this.form = {}
-    this.pageSize = 30
+    this.pageSize = pageSize || 30
+    this.isedit = isedit || false
   }
   search() {
     const _this = this
@@ -27,6 +28,9 @@ export default class PagedList {
       })
       this.total = this.data.length
     })
+    if (this.isedit) {
+      this.data.push({})
+    }
   }
 }
 

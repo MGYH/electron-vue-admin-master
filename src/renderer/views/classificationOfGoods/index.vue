@@ -16,30 +16,18 @@
         :height="height"
         class="editTable"
         style="width: 100%">
-        <el-table-column label="条形码" prop="code"></el-table-column>
         <el-table-column label="名称" prop="name">
           <template slot-scope="scope">
             <el-input v-model="scope.row.name" :disabled="!scope.row.edit"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="类型" prop="type">
+        <el-table-column label="附属类别" prop="treeString">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.type" :disabled="!scope.row.edit"></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="进价" prop="purchasePrice">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.purchasePrice"  :disabled="!scope.row.edit"></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="单价" prop="price">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.price" :disabled="!scope.row.edit"></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="保质期" prop="shelfLife">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.shelfLife" :disabled="!scope.row.edit"></el-input>
+            <cascader
+              :options="options"
+              @change="handleChange"
+              v-model="treeString"
+            ></cascader>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -57,39 +45,54 @@
   import PaginationTable from '../../components/Table/PaginationTable'
   import { clientResize } from '@/mixins/getClientResize'
   import PagedList from '@/utils/pageList'
-  import { save } from '@/api/goods'
-  import { Message } from 'element-ui'
+  import { getOptions } from '@/api/classification'
+  import Cascader from '@/components/Cascader/index'
+  
   export default {
     mixins: [clientResize],
-    name: 'test',
-    components: { PaginationTable },
+    name: 'index',
+    components: { PaginationTable, Cascader },
     methods: {
       onSubmit() {
         console.log('==========', this.formInline)
         this.formInline.search()
+        console.log(this.formInline)
       },
       handleClick(row) {
         row.edit = true
-        console.log(row)
+        console.log(row, this.treeString, '======123')
       },
-      save(row) {
-        save(row).then(
-          Message({
-            message: '成功',
-            type: 'success',
-            duration: 5 * 1000
-          })
-        )
-        row.edit = false
+      handleChange(...value) {
+        console.log(value, '===123')
+      },
+      save(value) {
+        console.log(value, '=========')
+        // save(value).then()
       }
+    },
+    mounted() {
+      getOptions().then(response => {
+        console.log(response.data, '======-----123rr')
+        this.options = response.data
+      })
     },
     data() {
       return {
         percentage: 0.8,
-        formInline: new PagedList('/goods/findAll'),
+        formInline: new PagedList('/classification/findAll', 30, true),
         height: ((window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) - 51) * 0.8,
         test: '',
-        tableData: []
+        treeString: [],
+        value: [],
+        tableData: [],
+        options: []
+      }
+    },
+    computed: {
+      getValue(val) {
+        console.log(val, '==============ada')
+        return val
+        // return val.split('/')
       }
     }
   }

@@ -29,8 +29,8 @@ export const constantRouterMap = [
     path: '/',
     component: Layout,
     redirect: '/checkout',
-    name: 'checkout',
-    hidden: true,
+    name: '主页',
+    hidden: false,
     children: [{
       path: 'checkout',
       component: () => import('@/views/checkout/index')
@@ -64,16 +64,16 @@ export const constantRouterMap = [
       }
     ]
   },
-
   {
-    path: '/form',
+    path: '/classification-of-goods',
     component: Layout,
+    name: '商品分类',
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'classification-of-goods',
+        name: 'classification-of-goods',
+        component: () => import('@/views/classificationOfGoods/index'),
+        meta: { title: '分类管理', icon: 'form' }
       }
     ]
   },
