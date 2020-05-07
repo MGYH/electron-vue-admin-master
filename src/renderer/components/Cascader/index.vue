@@ -1,12 +1,16 @@
 <template>
-  <el-cascader
-    :options="options"
-    :separator="separator"
-    :placeholder="placeholder"
-    @change="handleChange"
-    change-on-select
-    v-model="model"
-  ></el-cascader>
+  <div>
+    <el-cascader
+      :options="options"
+      :separator="separator"
+      :placeholder="placeholder"
+      @change="handleChange"
+      change-on-select
+      :disabled="disabled"
+      v-model="model" v-show="!disabled"
+    ></el-cascader>
+    <span v-show="disabled">{{label}}</span>
+  </div>
 </template>
 
 <script>
@@ -14,7 +18,8 @@
     name: 'index',
     data() {
       return {
-        model: this.value
+        model: this.value ? this.value.split(this.separator) : [],
+        label: ''
       }
     },
     props: {
@@ -23,7 +28,7 @@
         required: true
       },
       value: {
-        type: Array
+        type: String
       },
       props: {
         type: Object,
@@ -43,12 +48,17 @@
       placeholder: {
         type: String,
         default: '请选择'
+      },
+      disabled: {
+        type: Boolean
       }
+    },
+    mounted() {
+      this.currentLabels(this.model)
     },
     methods: {
       handleChange(value) {
         this.currentLabels(value)
-        console.log('===========value', this.value)
       },
       currentLabels(values) {
         let options = this.options
@@ -61,13 +71,19 @@
           }
         })
         const label = labels.join(this.separator)
+        this.label = label
         const value = values.join(this.separator)
         this.$emit('change', values[values.length - 1], label, value)
       }
     },
     watch: {
       model(value) {
-        this.$emit('input', value)
+        console.log('value', value)
+        this.$emit('input', value.join(this.separator))
+      },
+      value(val) {
+        console.log('val', val)
+        this.model = val ? val.split(this.separator) : []
       }
     }
   }

@@ -6,12 +6,13 @@
       <main>
         <slot></slot>
       </main>
-      <footer style="text-align: center" v-if="isPagination">
+      <footer style="text-align: center" v-if="pagination">
         <el-pagination
           layout="prev, pager, next"
-          :total="model.total"
-          :current-page="model.currentPage"
-          :page-size="model.pageSize">
+          :total="value.total"
+          @current-change="handleCurrentChange"
+          :current-page="value.currentPage"
+          :page-size="value.pageSize">
         </el-pagination>
       </footer>
     </div>
@@ -27,20 +28,17 @@
         console.log(row)
       },
       handleCurrentChange(val) {
-        this.$emit('handle-current-change', val)
+        this.value.currentPage = val
+        this.value.search()
       }
     },
-    // model ：{count : 0,pagesize:'1',page}
     props: {
-      model: {
-        require: true
+      value: {
+        type: Object
       },
-      isPagination: {
+      pagination: {
         default: true
       }
-    },
-    mounted() {
-      console.log('---------____')
     },
     data() {
       return {
@@ -49,8 +47,8 @@
       }
     },
     watch: {
-      'tableData'(val) {
-        this.total = val.length
+      value(val) {
+        this.$emit('input', val)
       }
     }
   }

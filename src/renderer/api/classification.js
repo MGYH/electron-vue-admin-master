@@ -9,7 +9,7 @@ export function getOptions() {
 
 export function save(classification) {
   return request({
-    url: '/classification/getOption',
+    url: '/classification/save',
     method: 'post',
     data: {
       classification

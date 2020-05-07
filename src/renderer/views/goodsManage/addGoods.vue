@@ -1,5 +1,5 @@
 <template>
-  <pagination-table :model="formInline">
+  <pagination-table v-model="formInline">
     <template v-slot:search>
       <el-form :inline="true" v-model="formInline.form">
         <el-form-item label="测试">
@@ -63,9 +63,11 @@
     mixins: [clientResize],
     name: 'test',
     components: { PaginationTable },
+    mounted() {
+      this.onSubmit()
+    },
     methods: {
       onSubmit() {
-        console.log('==========', this.formInline)
         this.formInline.search()
       },
       handleClick(row) {
