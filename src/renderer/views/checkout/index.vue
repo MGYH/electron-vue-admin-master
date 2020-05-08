@@ -42,21 +42,21 @@
       </el-table-column>
     </el-table>
     <input id="input" @keypress.enter="divClick(authcode)" v-model="authcode"  style="width: 0px;padding: 0px;height: 0px;border: 0px">
-    <el-row :gutter="3" v-if="sellRecord.totalMoney > 0">
+    <el-row :gutter="3" v-if="sellRecord.totalMoney > 0" style="margin-right: 0px">
       <el-col :span="1"><svg-button :icon-name="sellRecord.payment === 'cash' ? 'cash-selected':'cash'" @click="paymentClick('cash')"></svg-button></el-col>
       <el-col :span="1"><svg-button :icon-name="sellRecord.payment === 'zfb' ? 'zfb-selected':'zfb'" @click="paymentClick('zfb')"></svg-button></el-col>
       <el-col :span="1"><svg-button :icon-name="sellRecord.payment === 'wx' ? 'wx-selected':'wx'" @click="paymentClick('wx')"></svg-button></el-col>
       <el-col :span="20"  v-if="sellRecord.totalMoney > 0">
-      <el-form :inline="true" style="padding-left: 4px">
+      <el-form :inline="true" style="padding-left: 4px" v-if="sellRecord.payment==='cash'">
           <el-form-item label="实收">
-            <el-input  v-model="sellRecord.paid" type="number"></el-input>
+            <el-input  v-model="sellRecord.paid" @keyup.native="caculateChange" :class="{error : sellRecord.paid <sellRecord.totalMoney}"></el-input>
           </el-form-item>
           <el-form-item label="找零">
             <el-input v-model="sellRecord.change" disabled></el-input>
           </el-form-item>
         <el-form-item>
           <el-button @click='cancelPay' style="height: 40px" v-if="sellRecord.payment==='cash'">取消</el-button>
-          <el-button @click='pay()' style="height: 40px" :disabled='sellRecord.change < 0' v-if="sellRecord.payment==='cash'">确定</el-button>
+          <el-button @click='pay()' style="height: 40px"  type="success" :disabled='sellRecord.change < 0' v-if="sellRecord.payment==='cash'">确定</el-button>
         </el-form-item>
       </el-form>
       </el-col>
@@ -107,23 +107,32 @@
       }
     },
     mounted() {
-      this.focusOn('goodCode')
       this.init()
     },
     methods: {
+      caculateChange() {
+        this.sellRecord.change = (parseFloat(this.sellRecord.paid) - parseFloat(this.sellRecord.totalMoney)).toFixed(1)
+      },
       paymentClick(payment) {
-        this.sellRecord.payment = payment
-        this.focusOn('input')
+        if (this.sellRecord.payment !== payment) {
+          this.sellRecord.payment = payment
+          this.focusOn('input')
+        } else {
+          this.sellRecord.payment = ''
+          this.focusOn('goodCode')
+        }
       },
       init() {
         this.authcode = ''
         this.tableData = []
+        this.codeList = []
         this.sellRecord = {
           totalMoney: 0,
           paid: '',
           change: 0,
           payment: ''
         }
+        this.focusOn('goodCode')
       },
       focusOn(id) {
         if (this.sellRecord.payment === 'zfb' || this.sellRecord.payment === 'wx') {
@@ -154,7 +163,7 @@
           Message({
             message: '成功',
             type: 'success',
-            duration: 5 * 1000
+            duration: 1 * 1000
           })
         })
       },
@@ -188,7 +197,8 @@
                   return prev
                 }
               }, 0)
-              _this.sellRecord.totalMoney = sums[index]
+              _this.sellRecord.totalMoney = sums[index].toFixed(2)
+              _this.sellRecord.paid = _this.sellRecord.totalMoney
               sums[index] += ' 元'
             } else {
               sums[index] = ''
@@ -204,14 +214,14 @@
         row.name += ' '
       },
       setCurrent(row) {
-        console.log(row, '==========')
         this.$refs.singleTable.setCurrentRow(row)
       },
       handleCurrentChange(val) {
-        console.log(val, '==========12')
-        val.edit = true
-        this.currentRow.edit = false
-        this.currentRow = val
+        if (val) {
+          val.edit = true
+          this.currentRow.edit = false
+          this.currentRow = val
+        }
       },
       dialogClose(form) {
         this.dialogFormVisible = false
@@ -221,11 +231,13 @@
         this.goodCode = ''
       },
       onSearch() {
+        console.log('=============')
         const _this = this
         if (this.codeList.includes(this.goodCode)) {
           this.tableData.forEach(function(value, index) {
             if (value.code === _this.goodCode) {
-              value.num += 1
+              value.num = parseInt(value.num) + 1
+              value.total = (value.num * value.price).toFixed(2)
               _this.setCurrent(value)
               _this.goodCode = ''
               return
@@ -236,7 +248,7 @@
             if (response.data.length > 0) {
               _this.codeList.push(response.data[0].code)
               response.data[0].num = 1
-              response.data[0].total = response.data[0].price
+              response.data[0].total = (response.data[0].price * 1).toFixed(2)
               _this.tableData.push(response.data[0])
               _this.goodCode = ''
               _this.setCurrent(response.data[0])
@@ -244,7 +256,7 @@
               Message({
                 message: '商品条码未找到对应商品，请确认！！！',
                 type: 'warning',
-                duration: 3 * 1000
+                duration: 1 * 1000
               })
               _this.goodCode = ''
             }

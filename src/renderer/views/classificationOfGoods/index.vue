@@ -25,7 +25,7 @@
         style="width: 100%">
         <el-table-column label="名称" prop="name">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.name" :disabled="!scope.row.edit" :class="{isNull : !scope.row.name}"></el-input>
+            <el-input v-model="scope.row.name" :disabled="!scope.row.edit" :class="{error : !scope.row.name}"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="所属分类" prop="treeString">
