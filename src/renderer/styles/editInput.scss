@@ -1,7 +1,8 @@
 //后代选择器
 .editTable  .el-input__inner {
   border: 1px solid #dcdfe6;
-  color: #606266
+  color: #606266;
+  padding: 0px;
 }
 // ：disable :hover css伪类
 .editTable  .el-input__inner:disabled {
@@ -10,8 +11,17 @@
   background-color: #fff;
 }
 
+.editTable .el-input .is-disabled .el-input__suffix{
+  display: none;
+}
+
+.el-select .el-input.is-disabled .el-input__inner{
+  background-color: #fff;
+}
+
+
 .error .el-input__inner {
-  border: 1px solid indianred;
+  border: 1px solid #dcdfe6;
   border-radius : 4px
 }
 

@@ -16,30 +16,35 @@
         :height="height"
         class="editTable"
         style="width: 100%">
-        <el-table-column label="条形码" prop="code"></el-table-column>
-        <el-table-column label="名称" prop="name">
+        <el-table-column label="商品条码" prop="code"></el-table-column>
+        <el-table-column label="商品名称" prop="name">
           <template slot-scope="scope">
             <el-input v-model="scope.row.name" :disabled="!scope.row.edit"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="类型" prop="type">
+        <el-table-column label="所属分类" prop="treeString">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.type" :disabled="!scope.row.edit"></el-input>
+            <cascader
+              :options="options"
+              v-model="scope.row.treeString"
+              :disabled="!scope.row.edit"
+            ></cascader>
           </template>
         </el-table-column>
-        <el-table-column label="进价" prop="purchasePrice">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.purchasePrice"  :disabled="!scope.row.edit"></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column label="单价" prop="price">
+        <el-table-column label="商品售价" prop="price">
           <template slot-scope="scope">
             <el-input v-model="scope.row.price" :disabled="!scope.row.edit"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="保质期" prop="shelfLife">
+        <el-table-column label="保质期限" prop="shelfLife">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.shelfLife" :disabled="!scope.row.edit"></el-input>
+            <el-input v-model="scope.row.shelfLife" :disabled="!scope.row.edit">
+              <el-select v-model="scope.row.shelfLifeUnit" slot="append" placeholder="请选择" :disabled="!scope.row.edit">
+                <el-option label="年" value="year"></el-option>
+                <el-option label="月" value="month"></el-option>
+                <el-option label="日" value="day"></el-option>
+              </el-select>
+            </el-input>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -59,12 +64,16 @@
   import PagedList from '@/utils/pageList'
   import { save } from '@/api/goods'
   import { Message } from 'element-ui'
+  import { getOptions } from '@/api/classification'
+  import Cascader from '@/components/Cascader/index'
+
   export default {
     mixins: [clientResize],
     name: 'test',
-    components: { PaginationTable },
+    components: { PaginationTable, Cascader },
     mounted() {
       this.onSubmit()
+      this.getOptions()
     },
     methods: {
       onSubmit() {
@@ -83,6 +92,11 @@
           })
         )
         row.edit = false
+      },
+      getOptions() {
+        getOptions().then(response => {
+          this.options = response.data
+        })
       }
     },
     data() {
@@ -91,7 +105,8 @@
         formInline: new PagedList('/goods/findAll'),
         height: ((window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) - 51) * 0.8,
         test: '',
-        tableData: []
+        tableData: [],
+        options: []
       }
     }
   }

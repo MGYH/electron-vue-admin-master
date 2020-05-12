@@ -1,17 +1,29 @@
 <template>
   <el-dialog title="新增商品" :visible.sync="visible" >
-    <el-form :model="form">
+    <el-form :model="form" :inline="true">
       <el-form-item label="商品条码">
-        <el-input v-model="form.code" auto-complete="off"></el-input>
+        <el-input v-model="form.code"></el-input>
       </el-form-item>
       <el-form-item label="商品名称">
-        <el-input v-model="form.name" auto-complete="off"></el-input>
+        <el-input v-model="form.name"></el-input>
+      </el-form-item>
+      <el-form-item label="所属分类">
+        <cascader
+          :options="options"
+          v-model="form.treeString"
+        ></cascader>
       </el-form-item>
       <el-form-item label="商品售价">
-        <el-input v-model="form.price" auto-complete="off"></el-input>
+        <el-input v-model="form.price"></el-input>
       </el-form-item>
-      <el-form-item label="保质期">
-        <el-input v-model="form.shelfLife" auto-complete="off"></el-input>
+      <el-form-item label="保质期限">
+        <el-input v-model="form.shelfLife">
+          <el-select v-model="form.shelfLifeUnit" slot="append" placeholder="请选择">
+            <el-option label="年" value="year"></el-option>
+            <el-option label="月" value="month"></el-option>
+            <el-option label="日" value="day"></el-option>
+          </el-select>
+        </el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -24,10 +36,15 @@
 <script>
   import { save } from '@/api/goods'
   import { Message } from 'element-ui'
+  import Cascader from '@/components/Cascader/index'
+  import { getOptions } from '@/api/classification'
   export default {
     name: 'addGoodsDialog',
+    components: { Cascader },
     data() {
       return {
+        visible: false,
+        options: []
       }
     },
     props: {
@@ -44,6 +61,11 @@
       }
     },
     methods: {
+      getOptions() {
+        getOptions().then(response => {
+          this.options = response.data
+        })
+      },
       save() {
         save(this.form).then(response => {
           this.$emit('dialog-close', this.form)
@@ -59,6 +81,9 @@
         this.form = null
         this.$emit('dialog-close', this.form)
       }
+    },
+    mounted() {
+      this.getOptions()
     }
   }
 </script>

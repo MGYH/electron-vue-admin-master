@@ -245,6 +245,7 @@
           })
         } else {
           getGoods(_this.goodCode).then(response => {
+            console.log(response)
             if (response.data.length > 0) {
               _this.codeList.push(response.data[0].code)
               response.data[0].num = 1

@@ -21,6 +21,7 @@ export default class PagedList {
     const _this = this
     _this.data = []
     postSearch(this).then(response => {
+      console.log(response.data)
       _this.total = response.data.count
       response.data.list.forEach(function(value, index) {
         value.edit = false

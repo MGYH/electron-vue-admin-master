@@ -20,6 +20,26 @@ export function sellGoods(authCode, sellRecord, goodsList) {
   })
 }
 
+export function entryGoods(entryRecord, goodsList) {
+  return request({
+    url: '/goods/entryGood',
+    method: 'post',
+    data: {
+      entryRecord,
+      goodsList
+    }
+  })
+}
+
+export function entryReport() {
+  return request({
+    url: '/report/entryGoodReport',
+    method: 'post',
+    data: {
+    }
+  })
+}
+
 export function save(good) {
   return request({
     url: '/goods/save',

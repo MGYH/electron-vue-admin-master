@@ -24,43 +24,61 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
-
   {
     path: '/',
     component: Layout,
-    redirect: '/checkout',
+    hidden: true,
     name: '主页',
-    hidden: false,
     children: [{
       path: 'checkout',
+      name: 'checkout',
       component: () => import('@/views/checkout/index')
+    }]
+  },
+
+  {
+    path: '/checkout',
+    component: Layout,
+    name: '主页',
+    children: [{
+      path: 'checkout',
+      name: 'checkout',
+      component: () => import('@/views/checkout/index'),
+      meta: { title: '收费', icon: 'sale' }
     }]
   },
 
   {
     path: '/goodsmanage',
     component: Layout,
-    redirect: '/goodsmanage',
     name: '商品管理',
-    meta: { title: '商品管理', icon: 'example' },
+    redirect: '/goodsmanage/addGoods',
+    meta: { title: '商品管理', icon: 'goods' },
     children: [
       {
         path: 'addGoods',
         name: 'addGoods',
         component: () => import('@/views/goodsManage/addGoods'),
-        meta: { title: '新增商品', icon: 'table' }
+        meta: { title: '新增商品', icon: 'goods' }
       },
       {
         path: 'enterGoods',
         name: 'enterGoods',
         component: () => import('@/views/goodsManage/enterGoods'),
-        meta: { title: '商品录入', icon: 'table' }
-      },
+        meta: { title: '商品录入', icon: 'goods' }
+      }
+    ]
+  },
+  {
+    path: '/charts',
+    component: Layout,
+    name: '统计图',
+    children: [
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'charts',
+        name: 'charts',
+        component: () => import('@/views/charts/index'),
+        meta: { title: '统计图', icon: 'charts' }
       }
     ]
   },
