@@ -30,6 +30,7 @@
       handleCurrentChange(val) {
         this.value.currentPage = val
         this.value.search()
+        this.$emit('page-change')
       }
     },
     props: {

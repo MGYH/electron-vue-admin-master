@@ -21,7 +21,6 @@ export const clientResize = {
   },
   watch: {
     height(val) {
-      console.log('=============')
       if (!this.timer) {
         this.height = val
         this.timer = true

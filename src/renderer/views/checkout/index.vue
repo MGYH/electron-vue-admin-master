@@ -231,7 +231,6 @@
         this.goodCode = ''
       },
       onSearch() {
-        console.log('=============')
         const _this = this
         if (this.codeList.includes(this.goodCode)) {
           this.tableData.forEach(function(value, index) {

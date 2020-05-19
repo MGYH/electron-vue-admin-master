@@ -2,7 +2,7 @@
   <el-dialog title="新增商品" :visible.sync="visible" >
     <el-form :model="form" :inline="true">
       <el-form-item label="商品条码">
-        <el-input v-model="form.code"></el-input>
+        <el-input v-model="form.code" disabled></el-input>
       </el-form-item>
       <el-form-item label="商品名称">
         <el-input v-model="form.name"></el-input>
@@ -17,11 +17,11 @@
         <el-input v-model="form.price"></el-input>
       </el-form-item>
       <el-form-item label="保质期限">
-        <el-input v-model="form.shelfLife">
-          <el-select v-model="form.shelfLifeUnit" slot="append" placeholder="请选择">
-            <el-option label="年" value="year"></el-option>
-            <el-option label="月" value="month"></el-option>
-            <el-option label="日" value="day"></el-option>
+        <el-input v-model="form1.shelfLife">
+          <el-select v-model="form1.shelfLifeUnit" slot="append" placeholder="请选择">
+            <el-option label="年" value="年"></el-option>
+            <el-option label="月" value="月"></el-option>
+            <el-option label="日" value="日"></el-option>
           </el-select>
         </el-input>
       </el-form-item>
@@ -44,20 +44,32 @@
     data() {
       return {
         visible: false,
-        options: []
+        options: [],
+        form: {},
+        form1: {}
       }
     },
     props: {
       show: {
         require: true
       },
-      form: {
-        require: true
+      value: {
+        type: Object
       }
     },
     watch: {
       show(val) {
         this.visible = val
+      },
+      visible(val) {
+        if (!val && this.show) {
+          this.show = false
+          this.close()
+        }
+      },
+      value(val) {
+        console.log(val, '============')
+        this.form = val
       }
     },
     methods: {
@@ -67,8 +79,9 @@
         })
       },
       save() {
+        const _this = this
         save(this.form).then(response => {
-          this.$emit('dialog-close', this.form)
+          this.$emit('dialog-close', _this.form)
           Message({
             message: '成功',
             type: 'success',
@@ -78,8 +91,7 @@
         })
       },
       close() {
-        this.form = null
-        this.$emit('dialog-close', this.form)
+        this.$emit('dialog-close', false)
       }
     },
     mounted() {

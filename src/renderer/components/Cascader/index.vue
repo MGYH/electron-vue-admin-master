@@ -58,7 +58,6 @@
         this.currentLabels(value)
       },
       currentLabels(values) {
-        console.log(this.options, '=============')
         let options = this.options
         const labels = []
         values.forEach(value => {
@@ -68,9 +67,7 @@
             options = targetOption['children']
           }
         })
-        console.log(labels, '=============')
         const label = labels.join(this.separator)
-        console.log(label, '=============')
         this.label = label
         const value = values.join(this.separator)
         this.$emit('change', values[values.length - 1], label, value)
@@ -78,14 +75,16 @@
     },
     watch: {
       model(value) {
-        console.log('value', value)
         this.$emit('input', value.join(this.separator))
       },
       value(val) {
-        console.log('val', val)
         this.model = val ? val.split(this.separator) : []
+        this.currentLabels(this.model)
       },
       options() {
+        this.currentLabels(this.model)
+      },
+      disabled() {
         this.currentLabels(this.model)
       }
     }

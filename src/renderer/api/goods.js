@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import store from '@/store'
 
 export function getGoods(goodCode) {
   return request({
@@ -15,7 +16,8 @@ export function sellGoods(authCode, sellRecord, goodsList) {
     data: {
       authCode,
       sellRecord,
-      goodsList
+      goodsList,
+      name: store.getters.name
     }
   })
 }
@@ -26,7 +28,8 @@ export function entryGoods(entryRecord, goodsList) {
     method: 'post',
     data: {
       entryRecord,
-      goodsList
+      goodsList,
+      name: store.getters.name
     }
   })
 }
@@ -45,7 +48,18 @@ export function save(good) {
     url: '/goods/save',
     method: 'post',
     data: {
-      good
+      good,
+      name: store.getters.name
+    }
+  })
+}
+
+export function getPieChart(from) {
+  return request({
+    url: '/goods/getPieChart',
+    method: 'post',
+    data: {
+      from
     }
   })
 }

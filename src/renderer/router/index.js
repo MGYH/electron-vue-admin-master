@@ -59,7 +59,7 @@ export const constantRouterMap = [
         path: 'addGoods',
         name: 'addGoods',
         component: () => import('@/views/goodsManage/addGoods'),
-        meta: { title: '新增商品', icon: 'goods' }
+        meta: { title: '商品管理', icon: 'goods' }
       },
       {
         path: 'enterGoods',
@@ -72,13 +72,27 @@ export const constantRouterMap = [
   {
     path: '/charts',
     component: Layout,
-    name: '统计图',
+    name: '统计分析',
+    redirect: '@/views/charts/goodsChart',
+    meta: { title: '统计分析', icon: 'charts' },
     children: [
       {
-        path: 'charts',
-        name: 'charts',
-        component: () => import('@/views/charts/index'),
-        meta: { title: '统计图', icon: 'charts' }
+        path: 'goodsChart',
+        name: 'goodsChart',
+        component: () => import('@/views/charts/goodsChart'),
+        meta: { title: '商品统计', icon: 'charts' }
+      },
+      {
+        path: 'sellGoodsChart',
+        name: 'sellGoodsChart',
+        component: () => import('@/views/charts/sellGoodsChart'),
+        meta: { title: '销售统计', icon: 'charts' }
+      },
+      {
+        path: 'entryGoodsChart',
+        name: 'entryGoodsChart',
+        component: () => import('@/views/charts/entryGoodsChart'),
+        meta: { title: '入库统计', icon: 'charts' }
       }
     ]
   },

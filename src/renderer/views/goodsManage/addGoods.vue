@@ -1,9 +1,9 @@
 <template>
-  <pagination-table v-model="formInline">
+  <pagination-table v-model="formInline" @page-change="getOptions">
     <template v-slot:search>
-      <el-form :inline="true" v-model="formInline.form">
-        <el-form-item label="测试">
-          <el-input v-model="formInline.form.test" placeholder="测试"></el-input>
+      <el-form :inline="true" v-model="formInline.form" @submit.native.prevent>
+        <el-form-item label="商品条码">
+          <el-input v-model="formInline.form.code" placeholder="商品条码" @keypress.enter.native="onSubmit" id="goodcode"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -16,13 +16,17 @@
         :height="height"
         class="editTable"
         style="width: 100%">
-        <el-table-column label="商品条码" prop="code"></el-table-column>
-        <el-table-column label="商品名称" prop="name">
+        <el-table-column label="商品条码" prop="code">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.code" :disabled="!scope.row.edit"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="商品名称" prop="name" fit>
           <template slot-scope="scope">
             <el-input v-model="scope.row.name" :disabled="!scope.row.edit"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="所属分类" prop="treeString">
+        <el-table-column label="所属分类" prop="treeString" fit>
           <template slot-scope="scope">
             <cascader
               :options="options"
@@ -36,13 +40,13 @@
             <el-input v-model="scope.row.price" :disabled="!scope.row.edit"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="保质期限" prop="shelfLife">
+        <el-table-column label="保质期限" prop="shelfLife" fit>
           <template slot-scope="scope">
             <el-input v-model="scope.row.shelfLife" :disabled="!scope.row.edit">
               <el-select v-model="scope.row.shelfLifeUnit" slot="append" placeholder="请选择" :disabled="!scope.row.edit">
-                <el-option label="年" value="year"></el-option>
-                <el-option label="月" value="month"></el-option>
-                <el-option label="日" value="day"></el-option>
+                <el-option label="年" value="年"></el-option>
+                <el-option label="月" value="月"></el-option>
+                <el-option label="日" value="日"></el-option>
               </el-select>
             </el-input>
           </template>
@@ -78,6 +82,7 @@
     methods: {
       onSubmit() {
         this.formInline.search()
+        this.getOptions()
       },
       handleClick(row) {
         row.edit = true
@@ -102,7 +107,7 @@
     data() {
       return {
         percentage: 0.8,
-        formInline: new PagedList('/goods/findAll'),
+        formInline: new PagedList('/goods/findAll', 20, true),
         height: ((window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) - 51) * 0.8,
         test: '',
         tableData: [],

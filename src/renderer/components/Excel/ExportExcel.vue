@@ -17,14 +17,11 @@
       },
       methodname: {
         type: String
-      },
-      exporobject: {
-        type: Object
       }
     },
     methods: {
       exportExcel() {
-        exportExcel(this.methodname, this.form, this.exporobject).then(response => {
+        exportExcel(this.methodname, this.form).then(response => {
           console.log(response)
           const fileName = this.filename + '.xlsx'
           if (window.navigator.msSaveOrOpenBlob) {
