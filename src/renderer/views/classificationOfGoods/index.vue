@@ -65,7 +65,7 @@
     methods: {
       onSubmit() {
         this.formInline.search()
-        console.log(this.formInline)
+        this.getOptions()
       },
       handleClick(row) {
         row.edit = true

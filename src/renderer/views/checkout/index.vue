@@ -43,11 +43,11 @@
     </el-table>
     <input id="input" @keypress.enter="divClick(authcode)" v-model="authcode"  style="width: 0px;padding: 0px;height: 0px;border: 0px">
     <el-row :gutter="3" v-if="sellRecord.totalMoney > 0" style="margin-right: 0px">
-      <el-col :span="1"><svg-button :icon-name="sellRecord.payment === 'cash' ? 'cash-selected':'cash'" @click="paymentClick('cash')"></svg-button></el-col>
-      <el-col :span="1"><svg-button :icon-name="sellRecord.payment === 'zfb' ? 'zfb-selected':'zfb'" @click="paymentClick('zfb')"></svg-button></el-col>
-      <el-col :span="1"><svg-button :icon-name="sellRecord.payment === 'wx' ? 'wx-selected':'wx'" @click="paymentClick('wx')"></svg-button></el-col>
+      <el-col :span="1"><svg-button :icon-name="sellRecord.payment === '现金' ? '现金-selected':'现金'" @click="paymentClick('现金')"></svg-button></el-col>
+      <el-col :span="1"><svg-button :icon-name="sellRecord.payment === '支付宝' ? '支付宝-selected':'支付宝'" @click="paymentClick('支付宝')"></svg-button></el-col>
+      <el-col :span="1"><svg-button :icon-name="sellRecord.payment === '微信' ? '微信-selected':'微信'" @click="paymentClick('微信')"></svg-button></el-col>
       <el-col :span="20"  v-if="sellRecord.totalMoney > 0">
-      <el-form :inline="true" style="padding-left: 4px" v-if="sellRecord.payment==='cash'">
+      <el-form :inline="true" style="padding-left: 4px" v-if="sellRecord.payment==='现金'">
           <el-form-item label="实收">
             <el-input  v-model="sellRecord.paid" @keyup.native="caculateChange" :class="{error : sellRecord.paid <sellRecord.totalMoney}"></el-input>
           </el-form-item>
@@ -55,8 +55,8 @@
             <el-input v-model="sellRecord.change" disabled></el-input>
           </el-form-item>
         <el-form-item>
-          <el-button @click='cancelPay' style="height: 40px" v-if="sellRecord.payment==='cash'">取消</el-button>
-          <el-button @click='pay()' style="height: 40px"  type="success" :disabled='sellRecord.change < 0' v-if="sellRecord.payment==='cash'">确定</el-button>
+          <el-button @click='cancelPay' style="height: 40px" v-if="sellRecord.payment==='现金'">取消</el-button>
+          <el-button @click='pay()' style="height: 40px"  type="success" :disabled='sellRecord.change < 0' v-if="sellRecord.payment==='现金'">确定</el-button>
         </el-form-item>
       </el-form>
       </el-col>
@@ -66,7 +66,7 @@
 
 <script>
   // import { pay } from '@/api/pay'
-  import { getGoods, sellGoods } from '@/api/goods'
+  import { getGoodsByEntryCode, sellGoods } from '@/api/goods'
   import SvgButton from '@/components/Button/SVGButton'
   import { Message } from 'element-ui'
 
@@ -135,7 +135,7 @@
         this.focusOn('goodCode')
       },
       focusOn(id) {
-        if (this.sellRecord.payment === 'zfb' || this.sellRecord.payment === 'wx') {
+        if (this.sellRecord.payment === '支付宝' || this.sellRecord.payment === '微信') {
           document.addEventListener('mousedown', this.myfunction)
         } else {
           document.removeEventListener('mousedown', this.myfunction)
@@ -243,8 +243,7 @@
             }
           })
         } else {
-          getGoods(_this.goodCode).then(response => {
-            console.log(response)
+          getGoodsByEntryCode(_this.goodCode).then(response => {
             if (response.data.length > 0) {
               _this.codeList.push(response.data[0].code)
               response.data[0].num = 1

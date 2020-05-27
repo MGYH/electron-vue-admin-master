@@ -49,8 +49,9 @@
   import PaginationTable from '@/components/Table/PaginationTable'
   import { clientResize } from '@/mixins/getClientResize'
   import { getGoods, entryGoods } from '@/api/goods'
-  import addGoodsDialog from './addGoodsDialog'
-  import { Message, MessageBox } from 'element-ui'
+  import addGoodsDialog from '../goodsManage/addGoodsDialog'
+  import { MessageBox } from 'element-ui'
+  import Print from '@/utils/printTemplate'
 export default {
     mixins: [clientResize],
     name: 'test',
@@ -72,14 +73,11 @@ export default {
       },
       dialogClose(form) {
         this.dialogFormVisible = false
-        console.log(form, '==========')
         if (form) {
-          console.log(form, '==========')
           this.onSearch()
         }
       },
       onSearch() {
-        console.log(this.$store.getters.name)
         const _this = this
         if (this.form && this.form.code !== '') {
           _this.addList(this.form.code)
@@ -95,7 +93,6 @@ export default {
             return
           } else if (index === 3) {
             const values = data.map(item => Number(item[column.property]))
-            console.log(values, '=========333')
             if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {
                 const value = Number(curr)
@@ -149,11 +146,7 @@ export default {
       onSubmit() {
         const _this = this
         entryGoods({}, _this.tableData).then(response => {
-          Message({
-            message: '成功',
-            type: 'success',
-            duration: 1 * 1000
-          })
+          this.print.print(response.data)
           _this.init()
         })
       },
@@ -170,6 +163,7 @@ export default {
         tableData: [],
         currentRow: {},
         codeList: [],
+        print: new Print(),
         dialogFormVisible: false,
         options: [],
         form: {},

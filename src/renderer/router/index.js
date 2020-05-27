@@ -29,22 +29,17 @@ export const constantRouterMap = [
     component: Layout,
     hidden: true,
     name: '主页',
-    children: [{
-      path: 'checkout',
-      name: 'checkout',
-      component: () => import('@/views/checkout/index')
-    }]
+    redirect: '/checkout'
   },
 
   {
     path: '/checkout',
     component: Layout,
-    name: '主页',
     children: [{
       path: 'checkout',
       name: 'checkout',
       component: () => import('@/views/checkout/index'),
-      meta: { title: '收费', icon: 'sale' }
+      meta: { title: '收银台', icon: 'sale' }
     }]
   },
 
@@ -60,12 +55,27 @@ export const constantRouterMap = [
         name: 'addGoods',
         component: () => import('@/views/goodsManage/addGoods'),
         meta: { title: '商品管理', icon: 'goods' }
-      },
+      }
+    ]
+  },
+  {
+    path: '/entry',
+    component: Layout,
+    name: '库存管理',
+    redirect: '/entry/enterGoods',
+    meta: { title: '库存管理', icon: 'goods' },
+    children: [
       {
         path: 'enterGoods',
         name: 'enterGoods',
-        component: () => import('@/views/goodsManage/enterGoods'),
-        meta: { title: '商品录入', icon: 'goods' }
+        component: () => import('@/views/entry/enterGoods'),
+        meta: { title: '入库', icon: 'goods' }
+      },
+      {
+        path: 'entryGoodsChart',
+        name: 'entryGoodsChart',
+        component: () => import('@/views/entry/entryGoodsChart'),
+        meta: { title: '入库统计', icon: 'charts' }
       }
     ]
   },
@@ -87,12 +97,6 @@ export const constantRouterMap = [
         name: 'sellGoodsChart',
         component: () => import('@/views/charts/sellGoodsChart'),
         meta: { title: '销售统计', icon: 'charts' }
-      },
-      {
-        path: 'entryGoodsChart',
-        name: 'entryGoodsChart',
-        component: () => import('@/views/charts/entryGoodsChart'),
-        meta: { title: '入库统计', icon: 'charts' }
       }
     ]
   },
@@ -106,6 +110,19 @@ export const constantRouterMap = [
         name: 'classification-of-goods',
         component: () => import('@/views/classificationOfGoods/index'),
         meta: { title: '分类管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/test',
+    component: Layout,
+    name: '测试',
+    children: [
+      {
+        path: 'test',
+        name: 'test-of-goods',
+        component: () => import('@/views/Barcode/index'),
+        meta: { title: '测试', icon: 'form' }
       }
     ]
   },

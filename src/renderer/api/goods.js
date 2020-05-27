@@ -9,6 +9,14 @@ export function getGoods(goodCode) {
   })
 }
 
+export function getGoodsByEntryCode(entryCode) {
+  return request({
+    url: '/goods/getGoodsByEntryCode',
+    method: 'get',
+    params: { entryCode }
+  })
+}
+
 export function sellGoods(authCode, sellRecord, goodsList) {
   return request({
     url: '/goods/sellGood',

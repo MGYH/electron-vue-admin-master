@@ -43,23 +43,26 @@
           :height="height"
           class="editTable"
           style="width: 100%">
-          <el-table-column label="入库条码" prop="entryCode" fit></el-table-column>
+          <el-table-column label="入库编号" prop="id"></el-table-column>
+          <el-table-column label="商品条码" prop="code" fit></el-table-column>
           <el-table-column label="商品名称" prop="name"></el-table-column>
           <el-table-column label="所属分类" prop="treeName"></el-table-column>
-          <el-table-column label="售价" prop="price"></el-table-column>
-          <el-table-column label="进价" prop="purchasePrice"></el-table-column>
+          <el-table-column label="进价" prop="price"></el-table-column>
           <el-table-column label="数量" prop="num"></el-table-column>
-          <el-table-column label="付款方式" prop="payment"></el-table-column>
-          <el-table-column label="总金额" prop="totalMoney"></el-table-column>
-          <el-table-column label="实收金额" prop="paid"></el-table-column>
-          <el-table-column label="找零" prop="changes"></el-table-column>
-          <el-table-column label="销售日期" prop="date" fit></el-table-column>
-          <el-table-column label="销售人" prop="operator"></el-table-column>
+          <el-table-column label="剩余数量" prop="currentNum"></el-table-column>
+          <el-table-column label="入库日期" prop="date"></el-table-column>
+          <el-table-column label="入库人" prop="operator"></el-table-column>
+          <el-table-column label="条形码编号" prop="entryCode"></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button type="text" size="medium" @click="showPrint(scope.row)">打印</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </template>
     </pagination-table>
     <div v-show="chart">
-      <el-form :inline="true" v-model="formInline.form">
+        <el-form :inline="true" v-model="formInline.form">
         <el-form-item label="入库编号">
           <el-input v-model="formInline.form.id" placeholder="入库编号"></el-input>
         </el-form-item>
@@ -92,8 +95,18 @@
           <el-button type="primary" @click="showChart(false)">隐藏图表</el-button>
         </el-form-item>
       </el-form>
-      <mg-pie-charts :data="data" text="销售统计图"></mg-pie-charts>
+      <mg-pie-charts :data="data" text="入库统计图"></mg-pie-charts>
     </div>
+    <el-dialog title="打印" :visible.sync="printShow" >
+      <el-form :inline="true">
+        <el-form-item label="打印数量">
+          <el-input v-model="printData.num" placeholder="打印数量"></el-input>
+        </el-form-item>
+        <el-form-item>
+         <el-button type="primary" @click="printMethod">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -106,6 +119,7 @@
   import Cascader from '@/components/Cascader/index'
   import { clientResize } from '@/mixins/getClientResize'
   import { common } from '@/api/common'
+  import Print from '@/utils/printTemplate'
 
   export default {
     name: 'index',
@@ -118,12 +132,19 @@
     data() {
       return {
         data: [],
-        formInline: new PagedList('/sell/findAll', 30),
+        formInline: new PagedList('/entry/findAll', 30),
         height: ((window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) - 51) * 0.69,
         options: [],
         chart: false,
+        printShow: false,
         form: {
-        }
+        },
+        printData: {
+          code: '',
+          num: 0,
+          name: ''
+        },
+        print: new Print()
       }
     },
     methods: {
@@ -143,9 +164,25 @@
       },
       search() {
         const _this = this
-        common('/sell/getPieChart', this.formInline.form).then(response => {
+        common('/entry/getPieChart', this.formInline.form).then(response => {
           _this.data = response.data.list
         })
+      },
+      showPrint(row) {
+        this.printData = {}
+        this.printData.code = row.entryCode
+        this.printData.num = row.currentNum
+        this.printData.name = row.name
+        this.printShow = true
+      },
+      printMethod() {
+        const data = []
+        for (let i = 0; i < this.printData.num; i++) {
+          console.log(this.printData, '+++++++++++')
+          data.push({ name: this.printData.name, code: this.printData.code })
+        }
+        this.print.print(data)
+        this.printShow = false
       }
     }
 
