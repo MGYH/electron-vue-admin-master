@@ -82,7 +82,6 @@
           })
         )
         this.onSubmit()
-        this.getOptions()
       },
       getOptions() {
         getOptions().then(response => {

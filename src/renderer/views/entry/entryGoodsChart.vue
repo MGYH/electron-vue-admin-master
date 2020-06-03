@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
-            <export-excel filename="测试" methodname="getEntryGoodsList" :form="formInline.form"></export-excel>
+            <export-excel filename="入库统计" methodname="getEntryGoodsList" :form="formInline.form"></export-excel>
             <el-button type="primary" @click="showChart(true)">显示图表</el-button>
           </el-form-item>
         </el-form>
@@ -51,6 +51,7 @@
           <el-table-column label="数量" prop="num"></el-table-column>
           <el-table-column label="剩余数量" prop="currentNum"></el-table-column>
           <el-table-column label="入库日期" prop="date"></el-table-column>
+          <el-table-column label="剩余保质期天数" prop="remainingDays"></el-table-column>
           <el-table-column label="入库人" prop="operator"></el-table-column>
           <el-table-column label="条形码编号" prop="entryCode"></el-table-column>
           <el-table-column label="操作">
@@ -126,7 +127,6 @@
     components: { MgPieCharts, ExportExcel, PaginationTable, Cascader },
     mounted() {
       this.onSubmit()
-      this.getOptions()
     },
     mixins: [clientResize],
     data() {

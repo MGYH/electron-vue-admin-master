@@ -74,7 +74,7 @@ export const constantRouterMap = [
         path: 'entryGoodsChart',
         name: 'entryGoodsChart',
         component: () => import('@/views/entry/entryGoodsChart'),
-        meta: { title: '入库统计', icon: 'charts' }
+        meta: { title: '库存明细', icon: 'charts' }
       }
     ]
   },
@@ -130,14 +130,31 @@ export const constantRouterMap = [
     //     meta: { title: '测试', icon: 'form' }
     //   }
     // ]
-  },
-
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 export default new Router({
   // mode: 'history', //后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
+  // scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
 
+// 异步挂载的路由
+// 动态需要根据权限加载的路由表
+export const asyncRouterMap = [
+  {
+    path: '/permission',
+    component: Layout,
+    name: '权限测试',
+    meta: { role: ['admin'], title: '分类管理', icon: 'form' }, // 页面需要的权限
+    children: [
+      {
+        path: 'userManage',
+        name: 'userManage',
+        component: () => import('@/views/register/index'),
+        meta: { title: '用户管理', icon: 'charts' }
+      }
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
+]

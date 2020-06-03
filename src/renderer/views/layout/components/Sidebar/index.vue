@@ -26,7 +26,8 @@ export default {
       'sidebar'
     ]),
     routes() {
-      return this.$router.options.routes
+      console.log(this.$store.getters.roles2)
+      return this.$store.getters.roles2
     },
     isCollapse() {
       return !this.sidebar.opened

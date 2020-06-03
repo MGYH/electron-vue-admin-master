@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
-            <export-excel filename="测试" methodname="getEntryGoodsList" :form="formInline.form"></export-excel>
+            <export-excel filename="销售明细" methodname="getSellGoodsList" :form="formInline.form"></export-excel>
             <el-button type="primary" @click="showChart(true)">显示图表</el-button>
           </el-form-item>
         </el-form>
@@ -112,7 +112,6 @@
     components: { MgPieCharts, ExportExcel, PaginationTable, Cascader },
     mounted() {
       this.onSubmit()
-      this.getOptions()
     },
     mixins: [clientResize],
     data() {

@@ -25,3 +25,24 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function initPassword(user) {
+  return request({
+    url: '/user/initPassword',
+    method: 'post',
+    data: {
+      user
+    }
+  })
+}
+
+export function save(user) {
+  return request({
+    url: '/user/initPassword',
+    method: 'post',
+    data: {
+      user
+    }
+  })
+}
+
