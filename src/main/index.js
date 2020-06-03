@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -21,6 +21,7 @@ function createWindow() {
     height: 563,
     useContentSize: true,
     width: 1000
+    // frame: false // 关闭原生导航栏
   })
 
   mainWindow.loadURL(winURL)
@@ -28,6 +29,7 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+  Menu.setApplicationMenu(null)
 }
 
 app.on('ready', createWindow)

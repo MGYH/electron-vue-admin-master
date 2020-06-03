@@ -28,8 +28,7 @@ export const constantRouterMap = [
     path: '/',
     component: Layout,
     hidden: true,
-    name: '主页',
-    redirect: '/checkout'
+    redirect: '/checkout/checkout'
   },
 
   {
@@ -96,6 +95,12 @@ export const constantRouterMap = [
         path: 'sellGoodsChart',
         name: 'sellGoodsChart',
         component: () => import('@/views/charts/sellGoodsChart'),
+        meta: { title: '销售明细', icon: 'charts' }
+      },
+      {
+        path: 'sellGoodsReport',
+        name: 'sellGoodsReport',
+        component: () => import('@/views/charts/sellReport'),
         meta: { title: '销售统计', icon: 'charts' }
       }
     ]
@@ -116,15 +121,15 @@ export const constantRouterMap = [
   {
     path: '/test',
     component: Layout,
-    name: '测试',
-    children: [
-      {
-        path: 'test',
-        name: 'test-of-goods',
-        component: () => import('@/views/Barcode/index'),
-        meta: { title: '测试', icon: 'form' }
-      }
-    ]
+    name: '测试'
+    // children: [
+    //   {
+    //     path: 'test',
+    //     name: 'test-of-goods',
+    //     component: () => import('@/views/charts/sellReport'),
+    //     meta: { title: '测试', icon: 'form' }
+    //   }
+    // ]
   },
 
   { path: '*', redirect: '/404', hidden: true }

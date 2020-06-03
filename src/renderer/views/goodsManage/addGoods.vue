@@ -107,7 +107,7 @@
     data() {
       return {
         percentage: 0.8,
-        formInline: new PagedList('/goods/findAll', 20, true),
+        formInline: new PagedList('/goods/findAll', 20, {}, true),
         height: ((window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) - 51) * 0.8,
         test: '',
         tableData: [],
